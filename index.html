@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Rank-based persistence</title>
+  <link rel="stylesheet" href="./reveal.js/css/reveal.css">
+  <link rel="stylesheet" href="./reveal.js/css/theme/white.css">
+  <link rel="stylesheet" href="custom_style.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!--1 First slide -->
+      <section class="center"
+      data-fig-id="fig-opening"
+      data-background="assets/champalimaud.jpg"
+      data-background-transition="none">
+        <h1 style="color: #f6f6f6">Multicolored persistence</h1>
+        <h2 style="color: #f6f6f6">Mattia G. Bergomi, Pietro Vertechi</h2>
+        <h3 style="color: #f6f6f6">Champalimaud Research</h3>
+        <img src="assets/cf_logo.svg" style="width:20%"/>
+      </section>
+      <!--2 Outline -->
+      <section style="text-align: left;">
+        <h2>Outline</h2>
+        <ul>
+          <li class="fragment" data-fragment-index="1">
+            A recap and intuition on (non)-topological persistence
+          </li>
+          <li class="fragment" data-fragment-index="2">
+            Fundamentals of category theory:
+            <ul>
+              <li>Definition of category, objects, morphisms, universal properties.</li>
+              <li>Abelian and semisimple categories.</li>
+            </ul>
+          </li>
+          <li class="fragment" data-fragment-index="3">
+            Generalizing persistent homology with the language of category theory
+          </li>
+          <li class="fragment" data-fragment-index="4">
+            Multicolored persistent homology:
+            <ul>
+              <li>Group actions of filtration of spaces</li>
+              <li>Labelled datasets</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+      <!--3 Who else -->
+      <section style="text-align: left;">
+        <h2>Who else</h2>
+        <div class="row">
+          <div class="column">
+            <p>Massimo Ferri</p>
+            <img src="./funky_things/imgs/massimo.png" alt="Massimo" style="width: 50%">
+          </div>
+          <div class="column">
+            <p>Antonella Tavaglione</p>
+            <img src="./funky_things/imgs/antonella.png" alt="Antonella" style="width: 50%">
+          </div>
+          <div class="column">
+            <p>Lorenzo Zuffi</p>
+            <img src="./funky_things/imgs/lorenzo.png" alt="Lorenzo" style="width: 50%">
+          </div>
+          <div class="column">
+            <p>Alessandro Mella</p>
+            <img src="./funky_things/imgs/alessandro.jpg" alt="Alessandro" style="width: 50%">
+          </div>
+        </div>
+      </section>
+      <!--4 Recall and motivations -->
+      <section style="text-align: left;">
+        <div class="row" >
+          <div class = "column" style="width: 30%" >
+            <div class="row">
+              <h3 style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">
+                Classical framework
+              </h3>
+              <p style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">
+                $\mathbb{X}$ triangulable manifold
+                <br><br>
+                $f$ continuous.
+                <br><br>
+                $\mathbb{X}_{i} = f^{-1}\left(\left(-\infty, a_i\right]\right)$
+                <br><br>
+                $\mathbb{X}_{1} \subseteq \cdots \subseteq \mathbb{X}_{n} = \mathbb{X}$
+                <br><br>
+                <img width="100%" border="0" src="./funky_things/imgs/height_f.svg" alt="height" style="float: left;">
+              </p>
+            </div>
+          </div>
+
+          <div class = "column" style="width: 35%">
+            <div class="fragment" data-fragment-index="1">
+            <div class="row" >
+              <h3 style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">
+                (at least) 4 reasons why
+              </h3>
+              <div class ="row">
+                <p style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">Quantifiable and stable<img src="./funky_things/imgs/pd.svg" alt="ranked" style="width: 90%"></p>
+              </div>
+            </div>
+            <div class="fragment" data-fragment-index="2">
+              <div class ="row">
+                <p style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">Flexible<img src="./funky_things/imgs/sharks.svg" alt="sharks" style="width: 90%"></p>
+              </div>
+            </div>
+            <div class="fragment" data-fragment-index="3">
+              <div class ="row">
+                <p style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">Robust<img src="./funky_things/imgs/occlusions.svg" alt="occlusions" style="width: 90%"></p>
+              </div>
+            </div>
+            </div>
+          </div>
+          <div class="fragment" data-fragment-index="4">
+            <div class = "column" style="width: 29%">
+              <div class="row" >
+                <h3 style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">
+                  Limitations
+                </h3>
+                <div class ="row">
+                  <p style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">Graphs<img src="./funky_things/imgs/graph.svg" alt="graph" style="width: 90%"></p>
+                </div>
+                <div class ="row">
+                  <p style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">Quivers<img src="./funky_things/imgs/quiver.svg" alt="quiver" style="width: 90%"></p>
+                </div>
+                <div class ="row">
+                  <p style="float: left; text-align: center; width: 100%; margin-right: 1%; margin-bottom: 0.5em;">Labelled point clouds<img src="./funky_things/imgs/cluster_kmeans.png" alt="kmeans" style="width: 90%"></p>
+                </div>
+              </div>
+            </div>
+        </div>
+      </section>
+      <!-- Aim -->
+      <section style="text-align: left;">
+        <h2>Aim and the need for generality</h2>
+        <div class= "row">
+          <div class="column" style="width: 50%">
+          <p class="fragment" data-fragment-index="1">
+            <a href = "" >Beyond topological persistence</a>
+          </p>
+          <ul class="fragment" data-fragment-index="1">
+            <li>Graphs and quivers</li>
+            <li>$0$ Betti number functions</li>
+          </ul>
+        </div>
+        <div class="column" style="width: 50%">
+        <p class="fragment" data-fragment-index="2">
+          <a href = "" >Rank-based persistence</a>
+        </p>
+        <ul class="fragment" data-fragment-index="2">
+          <li>Metric spaces, posets <br>with group action!</li>
+          <li>All Betti number functions</li>
+        </ul>
+      </div>
+      </div>
+      </section>
+      <!-- Category -->
+      <section style="text-align: left;">
+          <h2>What is a category?</h2>
+
+          <p class="fragment" data-fragment-index="0">
+            A category $\mathbf C$ is composed of some objects
+            $\textrm{Obj}(\mathbf C)$ and some morphisms
+            $\textrm{Morph}(\mathbf C)$ between objects:
+
+            $ A \xrightarrow{\phi} B $
+          </p>
+          <p class="fragment" data-fragment-index="1">
+            Morphisms need to obey some simple axioms:
+            <ul class="fragment" data-fragment-index="1">
+              <li>Given $A \xrightarrow{\phi} B \xrightarrow{\psi} C$,
+                we have the composition
+                $A \xrightarrow{\psi \circ \phi} C$.</li>
+                <li>Any object $A$ has the identity morphism
+                  $A \xrightarrow{Id_A} A$.</li>
+                </ul>
+              </p>
+            </section>
+      <!-- Examples of cats -->
+      <section style="text-align: left;">
+        <h2>Why category theory?</h2>
+        <p>
+          The language of category theory allows to describe
+          heterogeneous mathematical objects in a uniform way.
+          <br>
+          <i>Category theory offers a pure theory of functions, not a
+            theory of functions derived from sets.</i>  (D. Scott)
+        </p>
+        <p class="fragment" data-fragment-index="1">
+          <b>Examples:<br>
+          </b>$\textbf{FinSet}$ is the category whose objects are
+          finite sets. Morphisms are functions between sets, with the
+          usual composition $\circ$.
+          <br>
+          Other categories: $\textbf{FinVec}_{\mathbb{K}}$,
+          $\textbf{FinSimp}$.
+        </p>
+        <h3 class="fragment" data-fragment-index="2">Functors</h3>
+        <p class="fragment" data-fragment-index="2">
+          A functor is a mapping between two categories that preserves
+          the categorical structure, i.e. objects, morphisms and
+          composition.
+        </p>
+      </section>
+      <!-- Mono and epic -->
+      <section style="text-align: left;">
+      <h2>Monomorphisms and epimorphisms</h2>
+      <ul>
+        <li class="fragment" data-fragment-index="1">A morphism $A \xrightarrow{\phi} B$ is monic if for
+          all $X \overset{\chi}{\underset{\psi}\rightrightarrows}
+          A$, $\psi\circ\phi = \chi\circ\phi$ implies
+          $\psi = \chi$.</li>
+
+          <li class="fragment" data-fragment-index="2">A morphism $A \xrightarrow{\phi} B$ is epic if for
+            all $B \overset{\chi}{\underset{\psi}\rightrightarrows} X$,
+            $\phi\circ\psi = \phi\circ\chi$ implies $\psi = \chi$.</li>
+        </ul>
+      </section>
+      <!-- Universal set-->
+      <section style="text-align: left;">
+          <h3>Universal properties</h3>
+          <p>
+            It is common to define things in terms of so called
+            universal properties. Let's work with the familiar
+            category of sets:
+          </p>
+          <ul>
+            <li >
+              An object $\varnothing$ is initial if for any $X$
+            there is a unique morphism $\varnothing \to X$: $\{ \}$
+            </li>
+
+            <li class="fragment" data-fragment-index="1">
+              An object $\textrm{pt}$ is terminal if for any $X$
+            there is a unique morphism $X \to \textrm{pt}$: $\{0\}$
+            </li>
+
+            <li  class="fragment" data-fragment-index="2">
+              Given $A, B$ an object is the product $A \times B$ if
+            a morphism $X \to A\times B$ is the same as a morphism
+            $X \to A$ and a morphism $X \to B$: Cartesian product.
+            </li>
+
+            <li  class="fragment" data-fragment-index="3">
+              Given $A, B$ an object is the coproduct $A \amalg B$
+            if a morphism $A\amalg B \to X$ is the same as a
+            morphism $A \to X$ and a morphism $B \to X$: disjoint union.
+            </li>
+        </ul>
+      </section>
+      <!-- Universal vec-->
+      <section style="text-align: left;">
+          <h3>Universal properties</h3>
+          <p>
+            It is common to define things in terms of so called
+            universal properties. Let's work with the familiar
+            category of <s>sets</s> vector spaces:
+          </p>
+          <ul>
+          <li>
+            An object $\varnothing$ is initial if for any $X$
+          there is a unique morphism $\varnothing \to X$: $0$
+          </li>
+
+          <li>
+            An object $\textrm{pt}$ is terminal if for any $X$
+          there is a unique morphism $X \to \textrm{pt}$: $0$
+          </li>
+
+          <li>
+            Given $A, B$ an object is the product $A \times B$ if
+          a morphism $X \to A\times B$ is the same as a morphism
+          $X \to A$ and a morphism $X \to B$: direct sum.
+          </li>
+
+          <li>
+            Given $A, B$ an object is the coproduct $A \amalg B$
+          if a morphism $A\amalg B \to X$ is the same as a
+          morphism $A \to X$ and a morphism $B \to X$: direct sum.
+          </li>
+        </ul>
+      </section>
+      <section style="text-align: left;">
+        <h3>The story so far</h3>
+        <div class="column" style="width:45%; margin-right: 50px">
+          <div class="row">
+            <h4>Topological flavor</h4>
+            <p>
+              $\mathbb{X}_1\subseteq\dots\subseteq\mathbb{X}_n$
+              <br><br>
+              We associate to each $\mathbb{X}_i$ the dimension of the image
+              of a map between vector spaces, e.g.,
+              <br><br>
+              $\beta_k(\mathbb{X}_i,\mathbb{K}) =$
+              <br>
+              $=\textrm{dim}Z_k(\mathbb{X}_i,\mathbb{K}) -  \textrm{dim}B_k(\mathbb{X}_i,\mathbb{K})$
+            </p>
+          </div>
+        </div>
+        <div class="column" style="width:45%">
+          <div class="row">
+            <h4 class="fragment" data-fragment-index="1">Set-based approach</h4>
+            <p class="fragment" data-fragment-index="1">
+              Let $(\mathbf{C},\mathcal{U})$ be a concrete category.
+              We define axioms that enable to transition back and forth between
+              subobjects of $X\in\textrm{Obj}(\mathbf{C})$ and subsets of
+              $\mathcal{U}(X)$.
+              <br><br>
+              $\beta^*_0(X_i) = |Z_0(X_i)| -  |B_0(X_i)|$
+            </p>
+          </div>
+        </div>
+      </section>
+      <section style="text-align: left;">
+        <h3>Starting from beyond</h3>
+        <p>
+          A <b>coherent sampling</b> ${\mathcal V}$ on $(\mathbf{C},
+          {\mathcal U})$ is the assignment to each
+          $X\in \textrm{Obj}(\mathbf{C})$ of a set ${\mathcal V}(X)$
+          of subsets of ${\mathcal U}(X)$, such that
+          <ul>
+            <li>${\mathcal V}(X)$ is a finite (possibly empty) set of elements of
+              ${\mathcal U}(\mathbf{C}_X)$;</li>
+            <li>if $X_1 \subseteq X_2$, each element of ${\mathcal V}(X_1)$ is
+             contained in only one element of ${\mathcal V}(X_2)$.</li>
+          </ul>
+        </p>
+        <p class="fragment" data-fragment-index="1">
+          <b>Example:</b> Clique communities
+          <img width="100%" border="0" data-src="./assets/clique_comm.svg" alt="cliques_comm">
+        </p>
+        <p class="fragment" data-fragment-index="2">
+          Coherent samplings require restricting the source category to accept
+          only monic morphisms, restricting to functors
+          $\mathbf{FinGraph}_{monic}\to\mathbf{FinSet}$.
+        </p>
+      </section>
+      <section style="text-align: left;">
+        <h3>Starting from beyond</h3>
+        <p>
+          Given any of its objects $X$, let $F: 2^{{\mathcal U}(X)} \to \{true, false\}$
+          be any feature such that $F(\emptyset)= false$. We call <i>$F$-set</i>
+          any set $A\subseteq {\mathcal U}(X)$ such that $F(A) = true$.
+        </p>
+        <p class="fragment" data-fragment-index="1">
+          <b>Example:</b> Hubs detection
+        </p>
+      </section>
+      <!--5 Ex1 -->
+      <section class="fig-container"
+               data-file="funky_things/html/got.html"
+               data-transitions="0"
+               style="text-align: left;pointer-events: none;">
+        <h2 style="color: #f6f6f6">Hubs in Game of Throne (books I-V)</h2>
+        <h4 style="color: #f6f6f6">Characters co-occurence</h4>
+      </section>
+      <!--6 Ex2 -->
+      <section class="fig-container"
+                data-file="funky_things/html/dynamical.html"
+                data-transitions="0"
+                data-background-color="#000000"
+                style="text-align: left;pointer-events: none;">
+      </section>
+      <section style="text-align: left;">
+        <h3>Regular categories</h3>
+        <p class="fragment" data-fragment-index="0">
+          In a regular category $\mathbf{R}$, every morphism $X\xrightarrow{\phi}Y$
+          can be factored in $X\twoheadrightarrow Z\hookrightarrow Y$, such that
+          $\phi=\mu\circ\epsilon$, $\epsilon:X\twoheadrightarrow Z$ is a regular
+          epimorphism (quotient), and $\mu:Z\hookrightarrow Y$ is a monomorphism. This allows
+          us to define naturally the notion of image.
+        </p>
+        <p class="fragment" data-fragment-index="1">
+          <b>Examples: </b> $\mathbf{Set}$, $\mathbf{Group}$, $\mathbf{RMod}$,
+          $\mathbf{Ring}$.
+        </p>
+        <p class="fragment" data-fragment-index="2">
+          <b>Intuition: </b>
+          Let $X, Y$ be sets, and $f:X\rightarrow Y$.
+          Consider
+          $$X \times_Y X = \left\{(x_1,x_2)\in X\times X \textrm{ s.t. } f(x_1)=f(x_2) \right\}$$
+          <br>
+          Consider $p_1: X \times_Y X \rightarrow X$ and $p_2: X \times_Y X \rightarrow X$, then
+          $$X\twoheadrightarrow X / (p_1\sim p_2) \hookrightarrow Y$$
+          <br>
+          where the injection is defined as $i(\overline{x}) = f(x)$, for any $\overline{x}\in X / (p_1\sim p_2)$.
+        </p>
+      </section>
+      <section style="text-align: left;">
+        <h3>Abelian categories</h3>
+        <p class="fragment" data-fragment-index="0">
+          An Abelian category $\mathbf{C}$ has zero object, biproducts, every
+          morphism has kernel and cokernel, each monomorphism is a kernel
+          and each epimorphism is a cokernel.
+          <br><br>
+          Any Abelian category is regular.
+        </p>
+        <p class="fragment" data-fragment-index="1">
+          <b>Example: </b>
+          The category $\textbf{Mod}_R$ of modules on a ring is
+          Abelian.<br>
+          1. The zero object is the $0$-module (the trivial group equipped with
+          the trivial $R$ action).<br>
+          2. $\textbf{Mod}_R$ has kernels and cokernels. Let $f: N_1\rightarrow N_2$,
+          then $ker(f) =\{x | f(x)=0\}$, and $coker(f)=N_2/Im(f)$.<br>
+          3. A homomorphism $f: N_1\rightarrow N_2$ is a monomorphism (epimorphism)
+          only if it is an injection (surjection).
+        </p>
+        <div style="display: flex; flex-direction:row">
+          <div class="fragment" data-fragment-index="2" style="width: 50%">
+            <p><b>Like Vec</b><br>
+              Length as a notion of dimension
+              $$0 \simeq X_0 \hookrightarrow X_1 \hookrightarrow \dots
+              \hookrightarrow X_n \simeq X$$ where all $X_{i+1}/X_i$ are simple.
+            </p>
+          </div>
+          <div class="fragment" data-fragment-index="3" style="width: 50%;">
+            <p>
+              <b>Unlike Vec</b><br>
+              No notion of basis
+            </p>
+          </div>
+        </div>
+      </section>
+      <section style="text-align: left;">
+        <h3>Semisimple categories</h3>
+        <p class="fragment" data-fragment-index="0">
+          <b>Simple object: </b>Let $\mathbf{C}$ be an Abelian category.
+          $X\in Obj(\mathbf{C})$ is simple if its only subobjects are $0$ and
+          $X$.
+        </p>
+        <p class="fragment" data-fragment-index="1">
+          <b>Lemma</b> (Schur lemma) Given $S, S^\prime$ simple objects in an
+          Abelian category, morphisms from $S$ to $S^\prime$ are either zero or
+          invertible.
+        </p>
+        <p class="fragment" data-fragment-index="2">
+          An Abelian category is semisimple if all its objects are semisimple,
+          i.e. each object can be written as a finite sum of simple objects.
+        </p>
+        <p class="fragment" data-fragment-index="3">
+          <b>Example: </b>
+          (Maschke's theorem) The category of representations of a finite group
+          $G$ over a field of characteristic not dividing $|G|$ (or $0$) is
+          semisimple.
+        </p>
+        <div style="display: flex; flex-direction:row">
+          <div class="fragment" data-fragment-index="4" style="width: 50%">
+            <p><b>Like Vec</b><br>
+              Exact sequences split, i.e. any exact sequence is isomorphic to
+              $$0\rightarrow X \rightarrow X\oplus Y\rightarrow Y\rightarrow 0$$
+            </p>
+          </div>
+          <div class="fragment" data-fragment-index="5" style="width: 50%;">
+            <p>
+              <b>Unlike Vec</b><br>
+              More than one simple objects.
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- Recipe -->
+      <section style="text-align: left;">
+        <h2>The fundamental ingredients of persistence</h2>
+
+        <p>Persistent homology requires a few basic ingredients:</p>
+        <ul>
+          <li class="fragment" data-fragment-index="0">A
+            filtration $X_t$ in the category $\mathbf{Top}$.</li>
+          <li class="fragment" data-fragment-index="1">A
+            functor $H_k:\mathbf{Top} \to \mathbf{Vec}$
+            (the homology in some degree).</li>
+          <li class="fragment" data-fragment-index="2">A
+            notion of <i>size</i> in the category $\mathbf{Vec}$
+            (the dimension of the vector space).</li>
+        </ul>
+
+        <h2 class="fragment" data-fragment-index="3" style="padding-top: 1em;">The recipe</h2>
+        <ul class="fragment" data-fragment-index="3">
+          <li>Start with a filtration of topological spaces $X_t$.</li>
+          <li>Obtain vector spaces $H_k(X_t)$ with linear maps
+            $H_k(X_s) \to H_k(X_t)$ for $s \le t$.</li>
+          <li>Consider the persistent homology spaces
+            $im(H_k(X_s) \to H_k(X_t))$.</li>
+          <li>Compute the the persistent Betti numbers
+            $dim(im(H_k(X_s) \to H_k(X_t))$.</li>
+        </ul>
+      </section>
+      <!-- Rank -->
+      <section data-markdown style="text-align: left;">
+        <textarea data-template>
+          ## Rank function generalizes rank of Abelian groups, dimension of vector spaces and cardinality of sets
+
+          Given a regular category $\mathbf R$, a function $r: \textrm{Obj}(\mathbf R) \to \mathbb Z$ is a rank function if:
+
+          - for any monomorphism $A \hookrightarrow B$, $r(A) \le r(B)$
+
+          - for any regular epimorphism $B \twoheadrightarrow D$, $r(B) \ge r(D)$
+
+          - given a pullback square
+          <div class="is-centered">
+            <img src="./assets/magnitudesquare.svg" style="width: 8em;">
+          </div>
+          the following inequality holds: $r(B) - r(D) \ge r(A) - r(C)$
+        </textarea>
+      </section>
+      <!-- Pullback condition -->
+      <section data-markdown style="text-align: left;">
+        <textarea data-template>
+
+          ## Explaining the pullback condition
+
+          <div class="is-centered">
+            <img src="./assets/magnitudediagram.svg" style="width: 16em;">
+          </div>
+
+          - If we restrict a surjection, the excess of the domain over the codomain is reduced.
+
+          - Always true if the excess is the sum of the excesses along the fibers: in that case we say the rank is fiber-wise.
+
+        </textarea>
+      </section>
+      <!-- Fiber-wise -->
+      <section style="text-align: left;">
+        <h2>Examples of fiber-wise rank functions</h2>
+        <ul>
+          <li>Cardinality in $\mathbf{FinSet}$</li>
+          <li>Dimension in $\mathbf{FinVec}_\mathbb{K}$</li>
+          <li>In an Abelian category, length (with finiteness assumptions)</li>
+          <li>Any non-negative "exact" function in an Abelian category, i.e. such that $r(0) = 0$ and for all short exact sequence $X \to Y \to Z$, $r(Y) = r(X) + r(Z)$</li>
+        </ul>
+      </section>
+      <!-- Cat pers functions -->
+      <section style="text-align: left;">
+        <h2>Categorical persistence function</h2>
+
+        <p class="fragment" data-fragment-index="0">
+          <b>Properties of persistent Betti numbers</b>
+          <br>Given $u_1\le u_2 \le v_1 \le v_2$:</p>
+        <ul class="fragment" data-fragment-index="0">
+          <li>$p(u_1, v_1) \le p(u_2, v_1)$ and $p(u_2, v_2) \le p(u_2, v_1)$</li>
+
+          <li>$p(u_2, v_1) - p(u_1, v_1) \ge p(u_2, v_2) - p(u_1, v_2)$</li>
+        </ul>
+        <p class="fragment" data-fragment-index="1">
+          <b>Definition</b> (Categorical persistence function).
+          $p:\textrm{Morph}(\mathbf C) \to \mathbb Z$ such that, given $u_1\to u_2 \to v_1 \to v_2$:
+        </p>
+        <ul class="fragment" data-fragment-index="1">
+          <li>$p(u_1 \to v_1) \le p(u_2 \to v_1)$ and $p(u_2 \to v_2) \le p(u_2 \to v_1)$</li>
+
+          <li>$p(u_2 \to v_1) - p(u_1 \to v_1) \ge p(u_2 \to v_2) - p(u_1 \to v_2)$</li>
+        </ul>
+        <p class="fragment" data-fragment-index="1">We recover the original definition when $\mathbf C = (\mathbb R, \le)$.</p>
+      </section>
+      <!-- Cat per functions 2 -->
+      <section style="text-align: left;">
+        <h2>Categorical persistence function</h2>
+
+        <p class="fragment" data-fragment-index="0">
+          <b>From a rank</b>
+          <br>Given a rank $r:\textrm{Obj}(\mathbf C) \to \mathbb Z$,
+          the rank of the image of a morphism $\phi \mapsto r(im(\phi))$
+          is a categorical persistence function:</p>
+        <ul class="fragment" data-fragment-index="0">
+          <li>cardinality of the image of a function between sets.</li>
+          <li>rank of a morphism between vector spaces.</li>
+          <li>length of the image of a morphism in an Abelian category.</li>
+        </ul>
+        <p class="fragment" data-fragment-index="1">
+          <b>From another categorical persistence function</b>
+          <br>Given a categorical persistence function $p$ in
+          $\mathbf D$ and a functor $F:\mathbf C \to \mathbf D$,
+          $p\circ F$ is a categorical persistence function in $\mathbf C$:
+        </p>
+        <ul class="fragment" data-fragment-index="1">
+          <li>$H_k: \mathbf{FinSimp} \to \mathbf{FinVec}$ defines
+            a persistence function in $\mathbf{FinSimp}$.</li>
+          <li>$Cliques: \mathbf{FinGraph}_{monic} \to \mathbf{FinSet}$ defines
+            a persistence function in $\mathbf{FinGraph}_{monic}$.</li>
+        </ul>
+      </section>
+      <!-- R-indexing -->
+      <section style="text-align: left;">
+        <h2>Back to the classical case</h2>
+        <p class="fragment" data-fragment-index="0">
+          A categorical persistence function
+          $p:\textrm{Morph}(\mathbf C) \to \mathbb Z$ and a
+          functor $(\mathbb R, \le) \to \mathbf C$ induce a
+          categorical persistence function on $(\mathbb R, \le)$,
+          the classical case.
+          <br>
+          <br>
+          Functors $(\mathbb R, \le) \to \mathbf C$, i.e.
+          $(\mathbb R, \le)$-indexed diagrams in $\mathbf C$,
+          generalize filtrations.
+        </p>
+
+        <div class="fragment" data-fragment-index="1" style="display: block; height:2rem"></div>
+        <div class="fragment" data-fragment-index="1">
+          <center>
+            <table>
+              <thead>
+                <tr>
+                  <th>Classical framework</th>
+                  <th>Categorical framework</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Topological spaces</td>
+                  <td>Source category $\mathbf C$</td>
+                </tr>
+                <tr>
+                  <td>Vector spaces</td>
+                  <td>Regular target category $\mathbf R$</td>
+                </tr>
+                <tr>
+                  <td>Dimension</td>
+                  <td>Rank function on $\mathbf R$</td>
+                </tr>
+                <tr>
+                  <td>Homology functor</td>
+                  <td>Arbitrary functor $\mathbf C \to \mathbf R$</td>
+                </tr>
+                <tr>
+                  <td>Filtration of topological spaces</td>
+                  <td>$(\mathbb R, \le)$-indexed diagram in $\mathbf C$</td>
+                </tr>
+              </tbody>
+            </table>
+          </center>
+        </div>
+      </section>
+      <!-- Persistence diagram -->
+      <section style="text-align: left;">
+        <h2>Persistence diagram</h2>
+        <p>
+        Given a persistence function $p:\textrm{Morph}(\mathbf{C})\to \mathbb Z$,
+        and a functor $F:(\mathbb R, \le) \to \mathbf{C}$ we can define:
+        <div class="is-centered">
+          $$\begin{aligned}
+          & p_F: \Delta^+ \to \mathbb Z \\
+          & (u, v) \mapsto p(F(u \le v))
+          \end{aligned}$$
+        </div>
+        </p>
+        <p class="fragment" data-fragment-index="0">
+        <b>Definition</b> Given $p_F$ as above, we can define the
+        cornerpoint multiplicity of $u < v$ as:
+        </p>
+        <p class="is-centered vert2pad fragment" data-fragment-index="0">
+        $$ \mu(u, v) = \min p_F(\beta, \gamma)-p_F(\alpha, \gamma) - p_F(\beta, \delta)+p_F(\alpha, \delta)$$
+        </p>
+        <p class="fragment" data-fragment-index="0">
+        where the minimum is taken over $\alpha, \beta, \gamma, \delta$
+        respecting $\alpha < u < \beta$ and $\gamma < v < \delta$.</p>
+        <p class="fragment" data-fragment-index="0">
+        In practice, the tighter the above inequalities are, the smaller the right-hand side is.
+        </p>
+        <p class="fragment" data-fragment-index="1">
+        <b>Remark</b> More generally,
+        $p_F(\beta, \gamma)-p_F(\alpha, \gamma) - p_F(\beta, \delta)+p_F(\alpha, \delta)$
+        denotes the sum of multiplicities of cornerpoints inside
+        the rectangle $(\alpha, \beta] \times (\gamma, \delta]$
+        (technical assumption: $\alpha, \beta, \gamma, \delta$ must be right-regular).
+        </p>
+
+        <p class="fragment" data-fragment-index="2">
+        <b>Definition</b> We denote $\mathcal{D}F$ the persistence
+        diagram of $F$ (cornerpoints with multiplicity).
+        </p>
+      </section>
+      <!-- persistence diagram -->
+      <section style="text-align: left;">
+        <h2>Persistence diagram for semisimple categories</h2>
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
+          <img style="width:35%" src="./assets/persistencediagram.svg"></img>
+          <div class="fragment" style="width:55%" data-fragment-index="1">
+            <p>
+              In $\mathbf{R}^{(\mathbb R, \le)}$ we have "interval objects" of the type:
+              <div style="display: flex; flex-direction: row; justify-content: space-around">
+                <p>
+                  $$
+                  \chi_{I, S}(a)  = \begin{cases}{}
+                    S&\text{if } a \in I\\
+                    0 &\text{otherwise}
+                  \end{cases}
+                  $$
+
+                  and
+
+                  $$
+                  \chi_{I, S}(a \le b) = \begin{cases}{}
+                    \textrm{Id}_S&\text{if } a, b \in I\\
+                    0 &\text{otherwise}
+                  \end{cases}
+                  $$
+                </p>
+              </div>
+              for $I$ an interval and $S$ a simple object of $\mathbf{R}$.
+            </p>
+          </div>
+        </div>
+        <div class="fragment" data-fragment-index="2">
+          <ul>
+            <li>Tame $(\mathbb R, \le)$-indexed diagram are finite sums
+              of interval objects.</li>
+            <li>The interval extrema, with multiplicity, are given
+              by the persistence diagram.</li>
+            <li>The persistence diagram does not tell us which simple object
+            corresponds to the various intervals.</li>
+          </ul>
+        </div>
+      </section>
+      <!-- interleaving and bottleneck -->
+      <!-- <section style="text-align: left;">
+        <h2>Interleaving and bottleneck distances</h2>
+
+        <p>Interleaving and bottleneck distance can be defined as in the classical theory.</p>
+
+        <p>
+          <b>Definition</b> Two functors $F, G:(\mathbb R, \le) \to \mathbf{C}$ are $\epsilon$-interleaved if there are natural transformations
+        </p>
+        <div class="vert2pad is-centered">
+          $$\begin{aligned}
+          F\to GT_\epsilon \\
+          G\to FT_\epsilon
+          \end{aligned}$$
+        </div>
+        <p>
+          where $T_\epsilon$ is the translation functor $x \mapsto x+\epsilon$, such that the following diagrams commute
+
+          <img src="./assets/interleaving.svg" style="width: 40em;" class="is-centered">
+
+          The interleaving distance is the infimum of $\epsilon$ values
+          such that $F$ and $G$ are $\epsilon$-interleaved.
+        </p>
+      </section> -->
+      <!-- tightness -->
+      <section style="text-align: left">
+        <h2>Interleaving and bottleneck distances</h2>
+        <p>
+          Bottleneck distance is defined as usual in terms of persistence
+          diagrams, as the infimum $l_\infty$ distance of bijections
+          of $\mathcal{D}F$ and $\mathcal{D}G$
+        </p>
+        <br>
+        <p>
+          <b>Theorem</b> (Stability) Given a category $\mathbf{C}$ with
+          finite colimits, a persistence function $p$ on $\mathbf{C}$
+          and two tame $(\mathbb R,\le)$-indexed diagrams
+          $F, G:(\mathbb R, \le) \to \mathbf{C}$,
+          the interleaving distance between $F,G$ is greater or equal
+          than the bottleneck distance:
+
+          <div class="vert2pad is-centered">
+            $$d_\mathbf{C}(F, G) \ge d(\mathcal{D}F, \mathcal{D}G)$$
+          </div>
+        </p>
+        <br>
+        <p class="fragment" data-fragment-index="0">
+          <b>Theorem</b> (Tightness) Given a semisimple Abelian category
+          $\mathbf{R}$ with essentially one simple object and the persistence
+          function $\phi \mapsto length(im(\phi))$, interleaving and
+          bottleneck distances are equal on tame $(\mathbb R, \le)$-indexed diagrams.
+          <!-- <br><br> -->
+          <!-- <b>Remark</b> Theorem (Tightness) generalizes the classical -->
+          <!-- result on $\mathbf{R}=\mathbf{FinVec}_\mathbb{K}$. We need -->
+          <!-- the hypothesis "essentially one simple object", as two constant -->
+          <!-- filtrations of non-isomorphic simple objects would have infinite -->
+          <!-- interleaving distance and bottleneck distance equal to $0$. -->
+        </p>
+      </section>
+      <!-- multicolored persistence -->
+      <!-- <section style="text-align: left;">
+        <h2>Multicolored persistence</h2>
+        <p>
+          Bottleneck distance is not very informative in categories
+          with many non-isomorphic simple objects. We can refine it by
+          coloring the persistence diagram.
+        </p>
+        <p>
+          Given a ranked category $(\mathbf{R}, r)$ (i.e. $\mathbf{R}$
+          is regular and $r$ is a rank function) and a family of ranked
+          categories $(\mathbf{R}_\gamma, r_\gamma)$, a coloring is
+          a family of functors $\mathcal{C}_\gamma:\mathbf{R}\to \mathbf{R}_\gamma$
+          such that:
+        </p>
+        <ul>
+          <li>The natural map $\textrm{Hom}_\mathbf{R}(X, Y) \to
+            \prod_{\gamma} \textrm{Hom}_{\mathbf{R}_\gamma}(\mathcal{C}_\gamma(X),
+            \mathcal{C}_\gamma(Y))$ is bijective.</li>
+
+          <li>The rank function $r$ is the sum of its components:
+            $r(X) = \sum_\gamma r_\gamma(\mathcal{C}_\gamma(X))$</li>
+        </ul>
+      </section> -->
+      <!-- examples of multicolored persistence -->
+      <!-- <section style="text-align: left">
+        <h2>Multicolored persistence in semisimple categories</h2>
+        <p>
+          The primary example of multicolored persistence comes from Abelian categories
+          of finite length. For simplicity, we focus on semisimple categories.
+        </p>
+        <p>
+          Given a semisimple category $\mathbf R$, we can decompose any $X \in \textrm{Obj}(\mathbf R)$ as direct sum of simple objects:
+        </p>
+        <div class="vert2pad is-centered">
+          $$ X = S_1^{m_1} \oplus \dots \oplus S_k^{m_k}$$
+        </div>
+        <p>
+          and the standard rank function $length$ respects $length(X) = m_1 + \dots + m_k$.
+        </p>
+        <p class="fragment" data-fragment-index="0">
+          Given $ X = S_1^{m_1} \oplus \dots \oplus S_k^{m_k} $ and $ Y = S_1^{n_1} \oplus \dots \oplus S_k^{n_k} $, we have:
+        </p>
+        <div class="vert2pad is-centered fragment" data-fragment-index="0">
+          $$ \textrm{Hom}(X, Y) = \prod_{i=1}^k \textrm{Hom}(S_i^{m_i}, S_i^{n_i})$$
+        </div>
+        <p class="fragment" data-fragment-index="0">
+          which gives the desired coloring of $(\mathbf R, length)$.
+        </p>
+      </section> -->
+      <!-- multicolored persistence diagram -->
+      <section style="text-align: left">
+        <h2>Multicolored bottleneck distance: an example from group actions</h2>
+        <div style="display:flex; flex-direction:row; justify-content:space-between; align-items:center">
+            <img src="assets/group_on_man.svg" alt="" style="width:30%">
+            <img src="assets/group_on_man_act.svg" alt="" style="width:20%">
+            <img src="assets/group_on_man_pd.svg" alt="" style="width:30%" class="fragment" data-fragment-index="0">
+        </div>
+        <p class="fragment" data-fragment-index="0">
+          The multicolored persistence diagram is simply the sum of persistence
+          diagrams of the components superimposed in different "colors".
+        </p>
+      </section>
+      <!-- multicolored distances -->
+      <section style="text-align: left">
+        <h2>Multicolored bottleneck distance: theoretical guarantees</h2>
+        <p>
+          Multicolored bottleneck distance is defined in terms of persistence
+          diagrams, as the infimum $l_\infty$ distance of <span style="font-style:italic">color-preserving</span> bijections
+          of $\mathcal{D}F$ and $\mathcal{D}G$.
+          <br>
+        </p>
+        <br>
+        <p>
+          <b>Theorem</b> (Multicolored stability) Let $\mathcal{C}$ be a coloring on a
+          ranked regular category $(\mathbf{C}, r)$ with
+          finite colimits. Given two tame $(\mathbb R,\le)$-indexed diagrams
+          $F, G:(\mathbb R, \le) \to \mathbf{C}$,
+          the interleaving distance between $F,G$ is greater or equal
+          than the multicolored bottleneck distance:
+          <div class="vert2pad is-centered">
+            $$d_\mathbf{C}(F, G) \ge d_\mathcal{C}(\mathcal{D}F, \mathcal{D}G)$$
+          </div>
+        </p>
+        <br>
+        <p class="fragment" data-fragment-index="0">
+          <b>Theorem</b> (Multicolored tightness) Given a semisimple Abelian category
+          $\mathbf{R}$ and the rank function $length$, interleaving and multicolored
+          bottleneck distances are equal on tame $(\mathbb R, \le)$-indexed diagrams.
+        </p>
+      </section>
+      <!-- conclusions -->
+      <section style="text-align: left">
+        <h2>Conclusions</h2>
+        <ul>
+          <li>
+            Categorical persistence is a general framework to work with objects indexed
+            by a real parameter.
+          </li>
+          <li>
+            Persistence diagram, bottleneck and interleaving distances, and stability
+            inequalities hold in a very general setting.
+          </li>
+          <li>
+            Multicolored persistence refines classical persistence when the target category
+            has many distinct simple objects (e.g. category of group representations).
+          </li>
+        </ul>
+        <br><br>
+        <div class="fragment" data-fragment-index="0">
+          <h2>Future directions</h2>
+          <ul>
+            <li>Explore other applications of multicolored persistence (i.e. labelled point clouds).</li>
+            <li>Write code to compute multicolored persistent homology efficiently.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="./reveal.js/lib/js/head.min.js"></script>
+  <script src="./reveal.js/js/reveal.js"></script>
+  <script>
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: false,
+      progress: true,
+      slideNumber: true,
+      history: true,
+      center: false,
+      controlsBackArrows: 'visible',
+      transition: 'none',
+      // Optional reveal.js plugins
+      dependencies: [
+        // d3.js library and plugin
+        { src: 'https://d3js.org/d3.v4.min.js' },
+        { src: './funky_things/js/plugin/math-katex/math-katex.js', async: true },
+        { src: './funky_things/js/d3js.js' },
+        { src: './funky_things/js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                  { src: './funky_things/js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: './funky_things/js/plugin/search/search.js', async: true },
+                  { src: './funky_things/js/plugin/zoom-js/zoom.js', async: true },
+        { src: './funky_things/js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+      ]
+    });
+  </script>
+</body>
+</html>

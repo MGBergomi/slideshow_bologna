@@ -1,0 +1,25 @@
+<head>
+  <style> body { margin: 0; }
+  .miserables{
+    z-index: 9999 !important;
+  }
+
+  </style>
+  <script src="../js/dist/3d-force-graph.js"></script>
+</head>
+
+<body>
+
+  <div id="miserables"></div>
+
+  <script>
+    const elem = document.getElementById('miserables');
+
+    const Graph = ForceGraph3D()(elem)
+      .jsonUrl('../data/ranging_miserables.json')
+      .nodeAutoColorBy('user')
+      .nodeLabel(node => `${node.user}: ${node.description}`)
+      .onNodeHover(node => elem.style.cursor = node ? 'pointer' : null)
+      .onNodeClick(node => window.open(`https://bl.ocks.org/${node.user}/${node.id}`, '_blank'));
+  </script>
+</body>
