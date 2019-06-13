@@ -714,30 +714,6 @@
           </ul>
         </div>
       </section>
-      <!-- interleaving and bottleneck -->
-      <!-- <section style="text-align: left;">
-        <h2>Interleaving and bottleneck distances</h2>
-
-        <p>Interleaving and bottleneck distance can be defined as in the classical theory.</p>
-
-        <p>
-          <b>Definition</b> Two functors $F, G:(\mathbb R, \le) \to \mathbf{C}$ are $\epsilon$-interleaved if there are natural transformations
-        </p>
-        <div class="vert2pad is-centered">
-          $$\begin{aligned}
-          F\to GT_\epsilon \\
-          G\to FT_\epsilon
-          \end{aligned}$$
-        </div>
-        <p>
-          where $T_\epsilon$ is the translation functor $x \mapsto x+\epsilon$, such that the following diagrams commute
-
-          <img src="./assets/interleaving.svg" style="width: 40em;" class="is-centered">
-
-          The interleaving distance is the infimum of $\epsilon$ values
-          such that $F$ and $G$ are $\epsilon$-interleaved.
-        </p>
-      </section> -->
       <!-- tightness -->
       <section style="text-align: left">
         <h2>Interleaving and bottleneck distances</h2>
@@ -765,64 +741,8 @@
           $\mathbf{R}$ with essentially one simple object and the persistence
           function $\phi \mapsto length(im(\phi))$, interleaving and
           bottleneck distances are equal on tame $(\mathbb R, \le)$-indexed diagrams.
-          <!-- <br><br> -->
-          <!-- <b>Remark</b> Theorem (Tightness) generalizes the classical -->
-          <!-- result on $\mathbf{R}=\mathbf{FinVec}_\mathbb{K}$. We need -->
-          <!-- the hypothesis "essentially one simple object", as two constant -->
-          <!-- filtrations of non-isomorphic simple objects would have infinite -->
-          <!-- interleaving distance and bottleneck distance equal to $0$. -->
         </p>
       </section>
-      <!-- multicolored persistence -->
-      <!-- <section style="text-align: left;">
-        <h2>Multicolored persistence</h2>
-        <p>
-          Bottleneck distance is not very informative in categories
-          with many non-isomorphic simple objects. We can refine it by
-          coloring the persistence diagram.
-        </p>
-        <p>
-          Given a ranked category $(\mathbf{R}, r)$ (i.e. $\mathbf{R}$
-          is regular and $r$ is a rank function) and a family of ranked
-          categories $(\mathbf{R}_\gamma, r_\gamma)$, a coloring is
-          a family of functors $\mathcal{C}_\gamma:\mathbf{R}\to \mathbf{R}_\gamma$
-          such that:
-        </p>
-        <ul>
-          <li>The natural map $\textrm{Hom}_\mathbf{R}(X, Y) \to
-            \prod_{\gamma} \textrm{Hom}_{\mathbf{R}_\gamma}(\mathcal{C}_\gamma(X),
-            \mathcal{C}_\gamma(Y))$ is bijective.</li>
-
-          <li>The rank function $r$ is the sum of its components:
-            $r(X) = \sum_\gamma r_\gamma(\mathcal{C}_\gamma(X))$</li>
-        </ul>
-      </section> -->
-      <!-- examples of multicolored persistence -->
-      <!-- <section style="text-align: left">
-        <h2>Multicolored persistence in semisimple categories</h2>
-        <p>
-          The primary example of multicolored persistence comes from Abelian categories
-          of finite length. For simplicity, we focus on semisimple categories.
-        </p>
-        <p>
-          Given a semisimple category $\mathbf R$, we can decompose any $X \in \textrm{Obj}(\mathbf R)$ as direct sum of simple objects:
-        </p>
-        <div class="vert2pad is-centered">
-          $$ X = S_1^{m_1} \oplus \dots \oplus S_k^{m_k}$$
-        </div>
-        <p>
-          and the standard rank function $length$ respects $length(X) = m_1 + \dots + m_k$.
-        </p>
-        <p class="fragment" data-fragment-index="0">
-          Given $ X = S_1^{m_1} \oplus \dots \oplus S_k^{m_k} $ and $ Y = S_1^{n_1} \oplus \dots \oplus S_k^{n_k} $, we have:
-        </p>
-        <div class="vert2pad is-centered fragment" data-fragment-index="0">
-          $$ \textrm{Hom}(X, Y) = \prod_{i=1}^k \textrm{Hom}(S_i^{m_i}, S_i^{n_i})$$
-        </div>
-        <p class="fragment" data-fragment-index="0">
-          which gives the desired coloring of $(\mathbf R, length)$.
-        </p>
-      </section> -->
       <!-- multicolored persistence diagram -->
       <section style="text-align: left">
         <h2>Multicolored bottleneck distance: an example from group actions</h2>
